@@ -36,3 +36,17 @@
 - parameters are as defined in the order (err,req,res,next) i.e 2 req,res / 3 re1,res,next / 4 err,req,res,next
   -Always first connect to database and then start the server
 - Middleware : Generally we use 'use' request so that it could pass all get post put patch req
+- If a data is already added into the database then on that data the validators are not applied. On adding new data only validators are applied
+
+
+# Difference between PATCH and PUT
+
+| **Aspect**         | **PUT**                    | **PATCH**                 |
+|---------------------|----------------------------|---------------------------|
+| **Operation**       | Replaces the whole resource | Updates part of the resource |
+| **Payload**         | Entire resource data       | Only fields to be updated |
+| **Idempotency**     | Yes                        | Yes                       |
+| **Use Case**        | Full replacement           | Partial update            |
+
+
+
