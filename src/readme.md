@@ -49,4 +49,12 @@
 | **Use Case**        | Full replacement           | Partial update            |
 
 
+# Encrypting Passwords
 
+- Validate the data
+- Encrypt the data
+- To encrypt passwords we will use bcrypt libraray from npm
+
+
+# Basics
+- when we are exporting anything as an object then we have to require the same in form of object only.

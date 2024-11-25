@@ -2,16 +2,24 @@ const express = require("express");
 const app = express();
 const connectDB = require("./config/database");
 const User = require("./models/user");
+const bcrypt = require("bcrypt");
+const { validateSignUpData } = require("./utils/validators");
 
 app.use(express.json());
-
 
 // SIGNING UP API
 app.post("/signup", async (req, res) => {
   console.log(req.body);
-  const user = new User(req.body);
-
   try {
+    validateSignUpData(req);
+    const { firstName, lastName, email, password } = req.body;
+    const encryptedPassword = await bcrypt.hash(password, 10);
+    const user = new User({
+      firstName,
+      lastName,
+      email,
+      password: encryptedPassword,
+    });
     await user.save();
     res.status(201).send("User created successfully.");
   } catch (err) {
@@ -19,7 +27,27 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-// GETTING USER DATA BASED ON EMAIL 
+// LOGIN API
+
+app.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      throw new Error("Invalid Credentials!!!");
+    }
+    const authenticate = await bcrypt.compare(password, user.password);
+    if (!authenticate) {
+      throw new Error("Invalid Credentials!!!");
+    } else {
+      res.status(200).send("Login Successfully :)");
+    }
+  } catch (err) {
+    res.send("Server Error" + err);
+  }
+});
+
+// GETTING USER DATA BASED ON EMAIL
 app.get("/user", async (req, res) => {
   const emailId = req.body.email;
 
@@ -43,57 +71,73 @@ app.get("/feed", async (req, res) => {
 
     res.send(userData);
   } catch (err) {
-    res.status(404).send("Something Went Wrong"+err.message);
+    res.status(404).send("Something Went Wrong" + err.message);
   }
 });
 
 // DELETE DATA API
 
-app.delete("/delete",async(req,res)=>{
-    const id = req.body._id;
-    try{
-        await User.findByIdAndDelete({_id:id})          // ({schema:us/fetched})
-        res.send("Deleted Successfully");
-    }
-    catch(err){
-        res.status(404).send("Something Went Wrong"+err.message);
-    }
-})
-
-// Updating User data
-
-app.patch("/user/:id", async (req, res) => {
-  const id = req.params?.id; // Extract ID from the body
-  const data = req.body; // Retrieve the whole body
-
+app.delete("/delete", async (req, res) => {
+  const id = req.body._id;
   try {
-    const ALLOWED_UPDATES = ["profilePic", "bio", "skills"];
-        
-        // Ensure only allowed fields are being updated
-        const isUpdateAllowed = Object.keys(data).every((k) => 
-            ALLOWED_UPDATES.includes(k)
-        );
-
-        if (!isUpdateAllowed) {
-            throw new Error("You can only change your ProfilePic, Bio, and Skills");
-        }
-
-      // Ensuring the 'skills' array has a length of 10 or less
-      if (data?.skills && data.skills.length > 10) {
-          throw new Error("You can add only up to 10 skills");
-      }
-
-      // Updating the user document
-      await User.findByIdAndUpdate({ _id: id }, data);
-      res.send("Updated Successfully");
+    await User.findByIdAndDelete({ _id: id }); // ({schema:us/fetched})
+    res.send("Deleted Successfully");
   } catch (err) {
-      res.status(404).send("Something Went Wrong: " + err.message);
+    res.status(404).send("Something Went Wrong" + err.message);
   }
 });
 
+// Updating User data
+// To update your data you must enter the current password
+app.patch("/user/:id", async (req, res) => {
+  const id = req.params?.id; // Extract ID from params
+  const { password, ...data } = req.body; // Here password is seperated explicitly whereas the data is still in json object format with the help of ...
+  console.log(data.password);
 
+  try {
+    // Fetch the user by ID
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
 
+    // Allowed fields for updates
+    const ALLOWED_UPDATES = [
+      "profilePic",
+      "bio",
+      "skills",
+      "gender",
+      "age",
+      "location",
+      "password",
+    ];
 
+    // Ensure only allowed fields are being updated
+    const isUpdateAllowed = Object.keys(data).every((key) =>
+      ALLOWED_UPDATES.includes(key)
+    );
+    if (!isUpdateAllowed) {
+      return res.status(400).send("You can't change your name and email");
+    }
+
+    // Ensure 'skills' array has a maximum length of 10
+    if (data.skills && data.skills.length > 10) {
+      return res.status(400).send("You can add only up to 10 skills");
+    }
+
+    // Authenticate with the current password
+    const isPasswordValid = await bcrypt.compare(password, user.password);// compare function takes to argumests(plainPassword,hashedPassword)
+    if (!isPasswordValid) {
+      return res.status(400).send("Wrong password");
+    }
+
+    // Update the user document
+    await User.findByIdAndUpdate(id, { $set: data }); //here $set:data is used to set specific thing that i want to use
+    res.status(200).send("Updated Successfully");
+  } catch (err) {
+    res.status(500).send("Something Went Wrong: " + err.message);
+  }
+});
 
 connectDB()
   .then(() => {
@@ -105,3 +149,6 @@ connectDB()
   .catch((err) =>
     console.log("Was not able to connect to database :( =>" + err)
   );
+
+
+  

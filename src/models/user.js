@@ -32,7 +32,6 @@ const userSchema = new mongoose.Schema({
   age: {
     type: Number,
     min:18,
-    required: true,
   },
   gender:{
     type: String,
@@ -48,7 +47,7 @@ const userSchema = new mongoose.Schema({
   },
   skills: {
     type: [String], // Array of skills (e.g., ["JavaScript", "React", "Node"])
-    required: true,
+    required: false,
   },
   bio: {
     type: String,
@@ -57,7 +56,7 @@ const userSchema = new mongoose.Schema({
   },
   profilePic: {
     type: String, // URL or file path to profile image  
-    default:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrmzaAZR0EL7gYGfM6QvJGtOzmeDFfe7fb3A&s",
+    default:"https://cheems.pet/static/header-img2-h5.17269aed.png",
     
     validate(value){
       if(!validator.isURL(value)){
