@@ -17,6 +17,19 @@ const validateSignUpData = (req)=>{
     
 }
 
+const validateEditProfileData = (req) => {
+  const allowedFields = ["firstName", "lastName", "age", "skills", "bio", "profilePic","email"];
+  const updates = Object.keys(req.body);
+
+  // check if every key is inside allowedFields
+  const isValid = updates.every((field) => allowedFields.includes(field));
+
+  return isValid;
+};
+
+
+
 module.exports = {
     validateSignUpData,
+    validateEditProfileData
 }

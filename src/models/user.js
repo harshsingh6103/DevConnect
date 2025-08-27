@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator")
+const jwt = require("jsonwebtoken")
+const bcrypt = require("bcrypt");
 const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
@@ -25,7 +27,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     validate(value){
       if(!validator.isStrongPassword(value)){
-        throw new Error("Invalid email address "+ value);
+        throw new Error("Weak password: "+ value);
       }
     }
   },
@@ -37,7 +39,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     validate(value){
       if(!["male","female","others"].includes(value)){
-        throw new error("Gender data is not valid")
+        throw new Error("Gender data is not valid")
       }
     }
   },
@@ -68,6 +70,25 @@ const userSchema = new mongoose.Schema({
   timestamps:true
 });
 
+
+userSchema.methods.getJWT = async function(){ //this doesnt works with arrow functions and this points out the specified user at that instance 
+  const user  = this;
+  const token = await jwt.sign({ _id: user._id }, "Harsh#999",{expiresIn:"7d"}); //jwt.sign({username:'name'},password,{expiresIn});
+      return token
+}
+
+userSchema.methods.validatePassword = async function(passwordInputByUser){
+  const user = this;
+  const passwordHash = user.password;
+  const isPasswordValid = await bcrypt.compare(passwordInputByUser,passwordHash); // returns boolean i.e true or false
+
+  return isPasswordValid;
+
+}
+
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;
+
+
+ 
