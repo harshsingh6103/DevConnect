@@ -1,34 +1,48 @@
-## DevConnect
+# DevConnect
 
-- Connect with like minded Developers
+## About
+DevConnect is a platform designed to bring developers together, fostering a vibrant community where tech professionals can connect, collaborate, and grow together.
 
-# To start project
+## Features
+- Developer profiles
+- Community discussions
+- Project collaboration
+- Skill sharing
+- Networking opportunities
+- Real-time chat
+- Resource sharing
 
-- npm run dev
+## Tech Stack
+- Node.js
+- Express.js
+- MongoDB
+- React.js
 
-# Libraries Used
+## Getting Started
+1. Clone the repository
+```bash
+git clone <repository-url>
+```
 
-1. **bcrypt**  
-   - Used for hashing and verifying passwords securely.
+2. Install dependencies
+```bash
+cd DevConnect
+npm install
+```
 
-2. **validator**  
-   - Provides validation utilities for strings (e.g., email, URL, etc.) and schema models.
+3. Set up environment variables
+```bash
+cp .env.example .env
+```
 
-3. **jsonwebtoken**  
-   - Used to create and verify JSON Web Tokens (JWT) for secure session management.
+4. Start the development server
+```bash
+npm run dev
+```
 
-4. **cookie-parser**  
-   - Parses and provides easy access to cookies from HTTP requests.
+## Contributing
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-5. **express**  
-   - A lightweight and flexible web application framework for handling routing and middleware.
-
-6. **mongoose**  
-   - A MongoDB object data modeling (ODM) library for schema definitions and database operations.
-
-7. **axios**
-   - A api handler used to handle apis 
-
-
-
+## License
+MIT License
 
