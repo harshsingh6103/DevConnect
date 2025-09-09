@@ -1,0 +1,27 @@
+// To read a cookie we need a cookie parser
+// jwt tokena are encryptwed hash  consists of three things that is header payload and signature 
+
+
+// only sign in and login api will not have auth.js middlewear wlse all other API's will have it 
+// never ever trust req.params or anything comming from request it may crash your website always add validators to check these request
+
+// always use return in any block of code in conditional statements as it helps to maintaion flow of the code
+
+
+
+// Hard ships only one can send connection req to each other that is rahul can send req to mina but mina cant again send request to rahul
+
+// api validation where api is not testing wether the user exists in db or not 
+
+
+
+// pre is a middleware in mongoose which is used to check the condition basixally acsts as a middlewear before saving the document in to the database  
+
+// there are indexes in db which makes api response faster from fetching the data from the database
+
+
+// compund index used for indexing -> it fastens the query and efficeintly manages the system if therwe are millions of records
+
+
+// ref and populate
+// ref: very powetful, creates links between two schema and joins them on basedn on the model name(that u are expoerting) 

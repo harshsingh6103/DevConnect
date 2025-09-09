@@ -27,7 +27,6 @@ authRouter.post("/signup", async (req, res) => {
 
 
 // LOGIN API -> BY PROVIDING EMAIL AND PASSWORD
-
 authRouter.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -65,6 +64,10 @@ authRouter.post("/logout", async (req, res) => {
     res.status(500).send("Error while logging out");
   }
 });
+
+
+
+
 
 
 
