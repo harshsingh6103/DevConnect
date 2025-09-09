@@ -17,7 +17,7 @@
 - Response: { message: "Logged out successfully" }
 
 ## Profile Routes
-### GET /profile/view
+### GET /profile/userProfile
 - Status: 200 OK
 - Headers: Authorization Bearer Token
 - Response: { profile data }
