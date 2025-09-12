@@ -17,7 +17,7 @@
             type: String,
             required:true,
             enum:{             // to restrict with some values
-                values: ["ignore","interested","accept","rejected"],
+                values: ["ignored","interested","accepted","rejected"],
                 message: `{VALUE} is not supported`   //to send msg if enum fails
             }                         
         },

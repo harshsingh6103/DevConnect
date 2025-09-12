@@ -66,4 +66,7 @@
 
 
 
+// skip and limit in MongoDB
 
+// /user/feed/:id      //req.params
+// /user/feed/page?=   //req.query
