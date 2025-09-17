@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevConnect - Documentation & API Reference</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .tabs-container {
+            background: #f8f9fa;
+            padding: 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .tab-buttons {
+            display: flex;
+            justify-content: center;
+            background: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-button {
+            background: transparent;
+            border: none;
+            padding: 20px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #6c757d;
+            border-bottom: 3px solid transparent;
+            position: relative;
+        }
+
+        .tab-button:hover {
+            color: #495057;
+            background: #f8f9fa;
+        }
+
+        .tab-button.active {
+            color: #007bff;
+            border-bottom-color: #007bff;
+            background: #ffffff;
+        }
+
+        .tab-button.active::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #007bff;
+        }
+
+        .content-area {
+            padding: 0;
+            min-height: 70vh;
+        }
+
+        .tab-content {
+            display: none;
+            height: 100%;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .iframe-wrapper {
+            width: 100%;
+            height: 800px;
+            position: relative;
+            background: #f8f9fa;
+        }
+
+        .embedded-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: white;
+        }
+
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #6c757d;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e3e3e3;
+            border-top: 4px solid #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .tab-info {
+            padding: 20px;
+            background: #e3f2fd;
+            margin: 0;
+            border-left: 4px solid #2196f3;
+        }
+
+        .tab-info h3 {
+            color: #1976d2;
+            margin-bottom: 8px;
+        }
+
+        .tab-info p {
+            color: #424242;
+            line-height: 1.6;
+        }
+
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+        }
+
+        .footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .header p {
+                font-size: 1rem;
+            }
+
+            .tab-buttons {
+                flex-direction: column;
+            }
+
+            .tab-button {
+                padding: 15px 20px;
+                border-bottom: 1px solid #dee2e6;
+                border-right: none;
+            }
+
+            .tab-button.active {
+                border-bottom-color: #007bff;
+                border-right-color: transparent;
+            }
+
+            .iframe-wrapper {
+                height: 600px;
+            }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            .container {
+                background: rgba(33, 37, 41, 0.95);
+                color: #ffffff;
+            }
+
+            .tab-buttons {
+                background: #343a40;
+            }
+
+            .tab-button {
+                color: #adb5bd;
+            }
+
+            .tab-button:hover {
+                color: #ffffff;
+                background: #495057;
+            }
+
+            .tab-button.active {
+                background: #495057;
+                color: #007bff;
+            }
+
+            .tab-info {
+                background: #1a2332;
+                color: #ffffff;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🚀 DevConnect</h1>
+            <p>Developer Networking Platform - Documentation & Resources</p>
+        </div>
+
+        <!-- Tabs Navigation -->
+        <div class="tabs-container">
+            <div class="tab-buttons">
+                <button class="tab-button active" onclick="showTab('documentation')" id="doc-tab">
+                    📚 Documentation
+                </button>
+                <button class="tab-button" onclick="showTab('api-reference')" id="api-tab">
+                    🔧 API Reference  
+                </button>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Documentation Tab -->
+            <div id="documentation" class="tab-content active">
+                <div class="tab-info">
+                    <h3>📖 DevConnect Documentation</h3>
+                    <p>Comprehensive guide covering installation, setup, features, and implementation details for the DevConnect platform.</p>
+                </div>
+                <div class="iframe-wrapper">
+                    <div class="loading-spinner" id="loading1">
+                        <div class="spinner"></div>
+                        <p>Loading Documentation...</p>
+                    </div>
+                    <iframe 
+                        src="https://claude.site/public/artifacts/d8d8fa78-71b9-46d8-98ef-2c224f5d45f2/embed" 
+                        title="DevConnect Documentation" 
+                        class="embedded-iframe"
+                        allow="clipboard-write" 
+                        allowfullscreen
+                        onload="hideLoading('loading1')">
+                    </iframe>
+                </div>
+            </div>
+
+            <!-- API Reference Tab -->
+            <div id="api-reference" class="tab-content">
+                <div class="tab-info">
+                    <h3>🔌 API Reference</h3>
+                    <p>Complete API documentation with endpoints, request/response examples, authentication, and integration guides.</p>
+                </div>
+                <div class="iframe-wrapper">
+                    <div class="loading-spinner" id="loading2">
+                        <div class="spinner"></div>
+                        <p>Loading API Reference...</p>
+                    </div>
+                    <iframe 
+                        src="https://claude.site/public/artifacts/da1085d4-e4ef-4e4b-bfd1-ef322f1eb8eb/embed" 
+                        title="DevConnect API Reference" 
+                        class="embedded-iframe"
+                        allow="clipboard-write" 
+                        allowfullscreen
+                        onload="hideLoading('loading2')">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>
+                Built with ❤️ for the DevConnect Community | 
+                <a href="https://github.com/your-repo/devconnect" target="_blank">GitHub</a> | 
+                <a href="#" onclick="showTab('api-reference')">API Docs</a> | 
+                <a href="#" onclick="showTab('documentation')">Documentation</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        function showTab(tabName) {
+            // Hide all tab contents
+            const allTabs = document.querySelectorAll('.tab-content');
+            allTabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Remove active class from all tab buttons
+            const allButtons = document.querySelectorAll('.tab-button');
+            allButtons.forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+
+            // Add active class to clicked button
+            if (tabName === 'documentation') {
+                document.getElementById('doc-tab').classList.add('active');
+            } else if (tabName === 'api-reference') {
+                document.getElementById('api-tab').classList.add('active');
+            }
+
+            // Store current tab in localStorage for persistence
+            localStorage.setItem('devconnect-active-tab', tabName);
+
+            // Add smooth transition effect
+            const activeTab = document.getElementById(tabName);
+            activeTab.style.opacity = '0';
+            setTimeout(() => {
+                activeTab.style.opacity = '1';
+            }, 50);
+        }
+
+        // Hide loading spinner when iframe loads
+        function hideLoading(loadingId) {
+            const loader = document.getElementById(loadingId);
+            if (loader) {
+                loader.style.display = 'none';
+            }
+        }
+
+        // Restore last active tab on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTab = localStorage.getItem('devconnect-active-tab');
+            if (savedTab && (savedTab === 'documentation' || savedTab === 'api-reference')) {
+                showTab(savedTab);
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            // Alt + 1 for Documentation
+            if (event.altKey && event.key === '1') {
+                event.preventDefault();
+                showTab('documentation');
+            }
+            // Alt + 2 for API Reference
+            else if (event.altKey && event.key === '2') {
+                event.preventDefault();
+                showTab('api-reference');
+            }
+        });
+
+        // Add visual feedback for iframe loading
+        document.querySelectorAll('.embedded-iframe').forEach(iframe => {
+            iframe.addEventListener('load', function() {
+                this.style.transition = 'opacity 0.3s ease';
+                this.style.opacity = '1';
+            });
+        });
+
+        // Error handling for iframe loading failures
+        window.addEventListener('error', function(event) {
+            if (event.target.tagName === 'IFRAME') {
+                const wrapper = event.target.parentElement;
+                const errorDiv = document.createElement('div');
+                errorDiv.innerHTML = `
+                    <div style="padding: 40px; text-align: center; color: #dc3545;">
+                        <h3>⚠️ Loading Error</h3>
+                        <p>Unable to load content. Please refresh the page or try again later.</p>
+                        <button onclick="location.reload()" style="margin-top: 15px; padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            🔄 Refresh Page
+                        </button>
+                    </div>
+                `;
+                wrapper.appendChild(errorDiv);
+            }
+        });
+
+        // Console welcome message
+        console.log(`
+🚀 DevConnect Documentation Portal
+====================================
+Welcome to DevConnect's documentation!
+
+Keyboard Shortcuts:
+• Alt + 1: Documentation
+• Alt + 2: API Reference
+
+Built with ❤️ for developers
+        `);
+    </script>
+</body>
+</html>
